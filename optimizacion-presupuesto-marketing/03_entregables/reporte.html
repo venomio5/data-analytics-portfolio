@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Informe de desempeño — Google vs Meta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+    :root {
+      --paper: #F4F1E9;
+      --paper-2: #EDE9DD;
+      --ink: #23262A;
+      --ink-soft: #5C5F57;
+      --line: #D8D2C2;
+      --google: #EA4335;
+      --google-soft: #FCE8E6;
+      --meta: #0668E1;
+      --meta-soft: #EBDEE5;
+      --good: #3F6B4A;
+      --good-soft: #DFE9E0;
+      --ok: #B4792F;
+      --ok-soft: #F0E3D0;
+      --bad: #AA4438;
+      --bad-soft: #F0DEDA;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #DAD5C3;
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .sheet {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 0 80px;
+    }
+
+    .page {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 56px 64px 64px;
+      margin-bottom: 28px;
+      position: relative;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    }
+
+
+
+    .eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      margin: 0 0 14px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 34px;
+      line-height: 1.15;
+      margin: 0 0 18px;
+    }
+
+    .lead {
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--ink);
+      max-width: 640px;
+      margin: 0 0 36px;
+    }
+
+    .lead b,
+    .note b {
+      font-weight: 600;
+    }
+
+    h2 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 19px;
+      margin: 0 0 4px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+    }
+
+    /* metric comparison bars */
+    .metric-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .metric-row:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .bar-track {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .bar-line {
+      display: grid;
+      grid-template-columns: 1fr 60px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar {
+      height: 9px;
+      border-radius: 2px;
+    }
+
+    .bar.google {
+      background: var(--google);
+    }
+
+    .bar.meta {
+      background: var(--meta);
+    }
+
+    .metric-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--ink-soft);
+      text-align: right;
+    }
+
+    .google-text {
+      color: var(--google);
+      font-weight: 500;
+    }
+
+    .meta-text {
+      color: var(--meta);
+      font-weight: 500;
+    }
+
+    .callout {
+      background: var(--paper-2);
+      border-left: 3px solid var(--ink);
+      padding: 16px 20px;
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    .legend-row {
+      display: flex;
+      gap: 20px;
+      font-size: 12px;
+      color: var(--ink-soft);
+      margin: 10px 0 24px;
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+
+    .verdict-list {
+      margin-top: 28px;
+    }
+
+    .verdict-item {
+      display: grid;
+      grid-template-columns: 16px 200px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      font-size: 13.5px;
+    }
+
+    .verdict-item:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-top: 5px;
+    }
+
+    .dot.good {
+      background: var(--good);
+    }
+
+    .dot.ok {
+      background: var(--ok);
+    }
+
+    .dot.bad {
+      background: var(--bad);
+    }
+
+    .v-name {
+      font-weight: 500;
+    }
+
+    .v-name span {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+
+    .v-note {
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .chart-wrap {
+      background: var(--paper-2);
+      padding: 20px 24px 8px;
+      margin-top: 6px;
+    }
+
+    .reco {
+      margin-top: 24px;
+    }
+
+    .reco-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .reco-item:last-child {
+      padding-bottom: 0;
+    }
+
+
+    .reco-title {
+      font-weight: 600;
+      font-size: 14.5px;
+      margin: 0 0 4px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 400;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .tag.up {
+      background: var(--good-soft);
+      color: var(--good);
+    }
+
+    .tag.down {
+      background: var(--ok-soft);
+      color: var(--ok);
+    }
+
+    .tag.stop {
+      background: var(--bad-soft);
+      color: var(--bad);
+    }
+
+    .reco-text {
+      font-size: 13.5px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+      max-width: 640px;
+    }
+
+    .footer-note {
+      margin-top: 40px;
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+
+    @media print {
+      :root {
+        --paper: #FFFFFF;
+        --paper-2: #F9F9F9;
+        --ink: #000000;
+      }
+
+      @page {
+        margin: 1.5cm;
+      }
+
+      body {
+        background: white;
+      }
+
+      .sheet {
+        padding: 0;
+      }
+
+      .page {
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 10px 20px;
+        page-break-after: always;
+      }
+
+      .callout,
+      .metric-row,
+      .chart-wrap,
+      .verdict-item,
+      .reco-item,
+      .insight-box {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Reducir márgenes para asegurar que la página 1 quepa en una sola hoja */
+      .lead {
+        margin: 0 0 10px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+      }
+
+      .metric-row {
+        padding: 5px 0;
+      }
+
+      .verdict-list {
+        margin-top: 10px;
+      }
+
+      .verdict-item {
+        padding: 6px 0;
+        gap: 8px;
+        font-size: 12px;
+      }
+
+      .chart-wrap {
+        padding: 10px 24px 0px;
+      }
+
+      .chart-wrap canvas {
+        height: 220px !important;
+      }
+    }
+
+    @media (max-width:700px) {
+      .page {
+        padding: 36px 22px 40px;
+      }
+
+      .verdict-item {
+        grid-template-columns: 16px 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sheet">
+
+    <!-- PÁGINA 1 — CANALES -->
+    <section class="page">
+      <p class="eyebrow">Análisis de campañas · canales</p>
+      <h1>Google y Meta no compiten entre sí, se turnan</h1>
+      <p class="lead">Con la misma inversión, <b>Meta genera 46.7% más retorno</b> que Google y consigue cada cliente
+        <b>34% más barato</b>. Pero Google llega a mil personas por <b>38.8% menos costo</b>. Ninguno gana solo — cada
+        uno resuelve una parte distinta del embudo.
+      </p>
+
+      <h2>Comparación directa</h2>
+      <p class="section-sub">Google vs Meta</p>
+
+      <div class="metric-row">
+        <div class="metric-label">ROAS</div>
+        <div class="bar-track">
+          <div class="bar-line">
+            <div class="bar google" style="width:68%"></div>
+            <div class="metric-value google-text">1.5</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar meta" style="width:100%"></div>
+            <div class="metric-value meta-text">2.2</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-label">CAC</div>
+        <div class="bar-track">
+          <div class="bar-line">
+            <div class="bar google" style="width:100%"></div>
+            <div class="metric-value google-text">$447</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar meta" style="width:66%"></div>
+            <div class="metric-value meta-text">$295</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-label">CPM</div>
+        <div class="bar-track">
+          <div class="bar-line">
+            <div class="bar google" style="width:61%"></div>
+            <div class="metric-value google-text">$102</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar meta" style="width:100%"></div>
+            <div class="metric-value meta-text">$166</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-label">CTR</div>
+        <div class="bar-track">
+          <div class="bar-line">
+            <div class="bar google" style="width:65%"></div>
+            <div class="metric-value google-text">1.5%</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar meta" style="width:100%"></div>
+            <div class="metric-value meta-text">2.3%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-label">CVR</div>
+        <div class="bar-track">
+          <div class="bar-line">
+            <div class="bar google" style="width:67%"></div>
+            <div class="metric-value google-text">1.6%</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar meta" style="width:100%"></div>
+            <div class="metric-value meta-text">2.4%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:var(--google)"></span>Google</span>
+        <span><span class="legend-dot" style="background:var(--meta)"></span>Meta</span>
+      </div>
+
+      <div class="callout">
+        <b>¿Por qué la diferencia?</b> Meta está armado para convertir: sus audiencias se definen por interés,
+        comportamiento o cercanía a la compra. Google reparte su inversión entre alcance masivo (Display, YouTube) y
+        búsqueda de alta intención (Search) — eso baja su retorno promedio, pero cubre una parte del embudo que Meta no
+        llena solo. Son piezas distintas del mismo sistema, no alternativas.
+      </div>
+    </section>
+
+    <!-- PÁGINA 2 — TIPO DE CAMPAÑA -->
+    <section class="page">
+      <p class="eyebrow">Análisis de campañas · tipos de campaña</p>
+      <h1>Seis tipos de campaña, un mismo patrón</h1>
+      <p class="lead">El retorno no depende del canal — depende de <b>qué tan cerca está la audiencia de comprar</b>.
+        Entre más frío el público, peor el número, sin importar si es Google o Meta.</p>
+
+      <h2>Retorno vs. costo de adquisición</h2>
+      <p class="section-sub">El tamaño de cada burbuja es la inversión total del tipo de campaña</p>
+
+      <div class="chart-wrap">
+        <canvas id="bubbleChart" height="260"></canvas>
+      </div>
+      <div class="legend-row">
+        <span><span class="legend-dot" style="background:var(--google)"></span>Google</span>
+        <span><span class="legend-dot" style="background:var(--meta)"></span>Meta</span>
+      </div>
+
+      <div class="verdict-list">
+        <div class="verdict-item">
+          <span class="dot" style="background: #0668E1"></span>
+          <span class="v-name">Conversión<span class="meta-text">Meta</span></span>
+          <span class="v-note">Es la segunda con más inversión total, pero vale muchísimo la pena. Tiene una excelente tasa de conversión, siendo la que mejor retorno genera en toda la cuenta.</span>
+        </div>
+        <div class="verdict-item">
+          <span class="dot" style="background: #669DF6"></span>
+          <span class="v-name">Consideración<span class="meta-text">Meta</span></span>
+          <span class="v-note">Se invierte una buena cantidad y logra un costo de adquisición bajo. Aunque el costo por impresión es un poco alto, lo compensa con una muy buena tasa de conversión.</span>
+        </div>
+        <div class="verdict-item">
+          <span class="dot" style="background: #EA4335"></span>
+          <span class="v-name">Search<span class="google-text">Google</span></span>
+          <span class="v-note">Acumula la mayor inversión de todas. Cuesta demasiado por mil impresiones ($1,500), pero se sostiene por tener muy buenas tasas de conversión. Su retorno de 1.5 es el mejor de Google.</span>
+        </div>
+        <div class="verdict-item">
+          <span class="dot" style="background: #F28B82"></span>
+          <span class="v-name">Display<span class="google-text">Google</span></span>
+          <span class="v-note">Tiene el costo por mil impresiones más barato ($32), ideal para alcance masivo. Genera muy pocas conversiones, pero aún así mantiene un retorno positivo (1.4). Es la segunda en la que menos se invierte.</span>
+        </div>
+        <div class="verdict-item">
+          <span class="dot" style="background: #B31412"></span>
+          <span class="v-name">YouTube<span class="google-text">Google</span></span>
+          <span class="v-note">La de menor inversión en toda la cuenta. Muestra un retorno y costo de adquisición similar a Display, pero con mejor conversión, aunque su costo por impresiones es cuatro veces mayor.</span>
+        </div>
+        <div class="verdict-item">
+          <span class="dot" style="background: #034094"></span>
+          <span class="v-name">Awareness<span class="meta-text">Meta</span></span>
+          <span class="v-note">Presenta un costo por clic mayor al de Display en Google ($4.4 en Meta frente a $3.1 en Google). Las audiencias actuales no están generando los resultados esperados, restando eficiencia a este esfuerzo de alcance.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PÁGINA 3 — CAMPAÑAS Y RECOMENDACIONES -->
+    <section class="page">
+      <p class="eyebrow">Análisis de campañas · plan de acción</p>
+      <h1>Plan de redistribución de presupuesto</h1>
+      <p class="lead">Basado en el rendimiento actual, es claro qué debemos apagar y dónde debemos inyectar más presupuesto. Las audiencias son la clave para estas decisiones.</p>
+
+
+      <div class="reco">
+        <h2>Qué hacer</h2>
+        <p class="section-sub">Acciones inmediatas para mejorar el rendimiento global de la cuenta</p>
+
+        <div class="reco-item">
+          <span class="tag stop">Pausar / Revisar</span>
+          <div>
+            <p class="reco-title">Apagar o revisar audiencias de Awareness en Meta</p>
+            <p class="reco-text">Comparado con las campañas de alcance en Google (Display), el costo por clic en Awareness es más costoso ($4.4 en Meta frente a $3.1 en Google). Las audiencias actuales (mujeres 25-40 y lookalike 1%) no están logrando el desempeño esperado.</p>
+          </div>
+        </div>
+
+        <div class="reco-item">
+          <span class="tag up">Escalar gradual</span>
+          <div>
+            <p class="reco-title">Subir presupuesto a Consideración y Conversión en Meta</p>
+            <p class="reco-text">Es recomendable inyectar presupuesto de forma paulatina. Aunque Retargeting presenta el mejor rendimiento, su tamaño de audiencia es limitado y podría saturarse al escalar. Invertir más en el "Lookalike 3% de suscriptores" ofrece mayor volumen para crecer sin agotar al público tan rápido.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const inkSoft = '#5C5F57';
+    const google = '#EA4335';
+    const meta = '#0668E1';
+    const good = '#3F6B4A';
+    const ok = '#B4792F';
+    const bad = '#AA4438';
+
+    Chart.defaults.font.family = "'Inter', sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = inkSoft;
+
+    // Bubble chart: ROAS vs CAC, size = inversión
+    const customLabelsPlugin = {
+      id: 'customLabels',
+      afterDatasetsDraw(chart, args, options) {
+        const { ctx } = chart;
+        chart.data.datasets.forEach((dataset, i) => {
+          const meta = chart.getDatasetMeta(i);
+          meta.data.forEach((element, index) => {
+            ctx.fillStyle = '#5C5F57';
+            ctx.font = "11px Inter";
+            const position = element.tooltipPosition();
+            
+            if (dataset.label === 'Conversión' || dataset.label === 'YouTube') {
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(dataset.label, position.x + element.options.radius + 6, position.y);
+            } else if (dataset.label === 'Display') {
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'top';
+              ctx.fillText(dataset.label, position.x, position.y + element.options.radius + 4);
+            } else {
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'bottom';
+              ctx.fillText(dataset.label, position.x, position.y - element.options.radius - 4);
+            }
+          });
+        });
+      }
+    };
+
+    new Chart(document.getElementById('bubbleChart'), {
+      type: 'bubble',
+      plugins: [customLabelsPlugin],
+      data: {
+        datasets: [
+          {
+            label: 'Display',
+            data: [{ x: 452.8, y: 1.4, r: 10.2 }],
+            backgroundColor: '#F28B82B3' /* Light Google Red */
+          },
+          {
+            label: 'Search',
+            data: [{ x: 433.0, y: 1.5, r: 15.1 }],
+            backgroundColor: '#EA4335B3' /* Main Google Red */
+          },
+          {
+            label: 'YouTube',
+            data: [{ x: 500.2, y: 1.3, r: 7.7 }],
+            backgroundColor: '#B31412B3' /* Dark Google Red */
+          },
+          {
+            label: 'Awareness',
+            data: [{ x: 1201.6, y: 0.5, r: 10.9 }],
+            backgroundColor: '#034094B3' /* Dark Meta Blue */
+          },
+          {
+            label: 'Consideración',
+            data: [{ x: 312.1, y: 2.2, r: 12.9 }],
+            backgroundColor: '#669DF6B3' /* Light Meta Blue */
+          },
+          {
+            label: 'Conversión',
+            data: [{ x: 201.5, y: 3.2, r: 14.6 }],
+            backgroundColor: '#0668E1B3' /* Main Meta Blue */
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false },
+          datalabels: false
+        },
+        scales: {
+          x: {
+            title: { display: true, text: 'CAC' },
+            grid: { color: '#D8D2C2' }
+          },
+          y: {
+            title: { display: true, text: 'ROAS' },
+            grid: { color: '#D8D2C2' },
+            min: 0, max: 3.6
+          }
+        }
+      }
+    });
+
+    // Manual labels for bubbles (Chart.js has no built-in point labels)
+    const bubbleLabels = ['Display', 'Search', 'YouTube', 'Awareness', 'Consideración', 'Conversión'];
+
+
+  </script>
+</body>
+
+</html>
