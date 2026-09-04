@@ -1,4 +1,4 @@
-# **Modelo de Predicción de Fútbol**
+# Modelo de Predicción de Fútbol
 
 Este proyecto nació de la intuición de que el mercado de apuestas no refleja con precisión lo que realmente ocurre dentro de un partido de fútbol. Para explotar esa ineficiencia, se construyó un pipeline algorítmico de principio a fin que genera “líneas justas” calibradas y las compara con las cuotas de las casas de apuestas en mercados de alta liquidez (1X2, Over/Under 2.5, Asian Handicap, entre otros).
 En esencia, se toma un partido con todas sus variables (jugadores, contexto, dinámica del juego) y se traduce a una simulación Monte Carlo que corre el encuentro miles de veces para obtener probabilidades exactas de cada resultado. Esas probabilidades, cuando difieren de las cuotas de mercado, representan una ventaja medible.
