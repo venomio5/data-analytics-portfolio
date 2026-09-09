@@ -4618,7 +4618,7 @@ class AutoSS:
 
         return best_url
 
-# ------------------------------ Trading (DELETE THIS) ------------------------------
+# ------------------------------ Trading ------------------------------
 class MatchTrade:
     def __init__(self, matched_bets):
         self.matched_bets = matched_bets
