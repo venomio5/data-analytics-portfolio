@@ -1,4 +1,4 @@
-import markets.sports.soccer.scripts.core as core
+import core
 import pandas as pd
 from datetime import datetime, timedelta
 import json

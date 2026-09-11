@@ -1,4 +1,4 @@
-import markets.sports.soccer.scripts.core
+import core
 from tqdm import tqdm
 import pandas as pd
 import math

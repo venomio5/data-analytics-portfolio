@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (QApplication, QMainWindow, QWidget, QHBoxLayout, 
                                QDialog, QListWidget, QListWidgetItem, QTabWidget, QFormLayout, QPlainTextEdit, QHeaderView,
                                QGridLayout, QLineEdit, QGroupBox, QSpinBox, QDateEdit, QTableWidget, QTableWidgetItem)
 from functools import partial
-import markets.sports.soccer.scripts.core as core
+import core
 import warnings 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 import pandas as pd
