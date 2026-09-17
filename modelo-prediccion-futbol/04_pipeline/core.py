@@ -490,7 +490,7 @@ def load_fr_models():
 def predict_fr_coef(mode: str, coef: float, feature: float, model):
     if mode == "fatigue":
         X = dmatrix(
-            "bs(fatigue, df=5, degree=3, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
+            "bs(fatigue, df=3, degree=2, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
             {"fatigue": [feature]},
             return_type="dataframe"
         )
@@ -499,7 +499,7 @@ def predict_fr_coef(mode: str, coef: float, feature: float, model):
         return coef + adjustment
     elif mode == "rhythm":
         X = dmatrix(
-            "bs(rhythm, df=5, degree=3, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
+            "bs(rhythm, df=3, degree=2, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
             {"rhythm": [feature]},
             return_type="dataframe"
         )
@@ -2644,7 +2644,7 @@ class ProcessData:
         rhythm_df = fr_df[['rhythm', 'r_adjustment']].copy()
 
         x_rhythm = dmatrix(
-            "bs(rhythm, df=5, degree=3, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
+            "bs(rhythm, df=3, degree=2, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
             data=rhythm_df,
             return_type="dataframe"
         )
@@ -2659,7 +2659,7 @@ class ProcessData:
         fatigue_df = fr_df[["fatigue", "f_adjustment"]].copy()
 
         x_fatigue = dmatrix(
-            "bs(fatigue, df=5, degree=3, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
+            "bs(fatigue, df=3, degree=2, include_intercept=False, lower_bound=0.0, upper_bound=1.0)",
             data=fatigue_df,
             return_type="dataframe"
         )
