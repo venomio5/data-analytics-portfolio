@@ -1,15 +1,12 @@
 # Análisis de factores que influyen en el costo de seguro médico
 
-Las primas del seguro de salud de la empresa aumentaron recientemente un **15%**. Para ayudar a controlar futuros incrementos y reducir el costo por empleado, se analizó la base de datos interna con información demográfica y gastos médicos asociados.
-
-El objetivo fue identificar los **principales factores determinantes de los costos** sobre los que se puede actuar mediante campañas de bienestar específicas. Utilizando un modelo de regresión Lasso con características polinómicas y análisis SHAP, se identificó que el **hábito de fumar** es, por mucho, la palanca más impactante. La recomendación final es implementar una **campaña antitabaco** enfocada en empleados fumadores, lo que permitiría reducir significativamente los cargos por empleado y compensar el alza de las primas.
+Las aseguradoras necesitan saber qué características de sus asegurados influyen más en los cargos médicos, y cuáles de ellas se pueden modificar para reducirlos. Limpié y exploré un dataset de 1,337 asegurados, y con la correlación y la comparación de cargos por grupo identifiqué el tabaquismo como el factor con mayor relación con los cargos. Para medirlo con más precisión construí un modelo de regresión polinomial con regularización Lasso (R² = 0.89), que captura las interacciones entre variables, como IMC × fumador. Con ese modelo predije los cargos y simulé escenarios de reducción de tabaquismo e IMC.
 
 Estructura del proyecto:
 
 ```
 ├── data/               # Conjuntos de datos originales y procesados utilizados en el análisis.
 ├── notebooks/          # Cuadernos de Jupyter con las distintas etapas del análisis (exploración, visualización y modelado).
-├── reports/figures/    # Gráficas y figuras clave generadas para la presentación de resultados.
 └── README.md
 ```
 
