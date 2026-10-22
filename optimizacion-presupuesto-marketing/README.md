@@ -1,9 +1,8 @@
 # Optimización de Presupuesto en Marketing Digital
 
-Este proyecto consiste en un análisis de datos enfocado en evaluar la rentabilidad de diversas campañas publicitarias en Google Ads y Meta Ads. El objetivo principal fue identificar qué campañas y audiencias estaban generando pérdidas y cuáles estaban listas para ser escaladas, optimizando así el Costo de Adquisición de Clientes (CAC) y mejorando el Retorno de Inversión (ROAS).
+Una empresa de servicios digitales no sabía qué campañas de Google Ads y Meta Ads eran rentables y destinaba presupuesto a audiencias que no convertían. Analicé en Python el rendimiento por canal y por tipo de campaña (ROAS, CAC, CPM, CTR, CVR) y encontré que el retorno depende de qué tan cerca está la audiencia de comprar, no del canal. Meta generó 46.7% más ROAS y un CAC 34% menor, mientras Google aportó alcance a menor costo. Entregué un plan de redistribución de presupuesto: pausar las audiencias de Awareness en Meta y escalar de forma gradual Consideración y Conversión
 
 Estructura del Proyecto:
-
 
 ```
 ├── 01_datos/          # Contiene los conjuntos de datos en crudo extraídos de las plataformas publicitarias.
