@@ -2,11 +2,9 @@
 
 ![Descripción de la imagen](reports/Dashboard-Screenshot.png "Hi")
 
-P&L, flujo de caja y márgenes por sucursal para una distribuidora mayorista
-de abarrotes con 3 sucursales. Proyecto freelance de BI desarrollado en Python,
-Power Query y Power BI.
+Un distribuidor de abarrotes con tres sucursales recibía su información financiera hasta el día 20 del mes siguiente, con datos dispersos en tres fuentes sin formato común. Perfilé y limpié los datos con Python y Power Query, modelé un esquema estrella con medidas DAX centralizadas y diseñé plantillas Excel con validación para estandarizar la captura. El resultado es un dashboard en Power BI con P&L simplificado, flujo de caja, márgenes por sucursal y comparativas mes a mes y año a año, que da visibilidad diaria del negocio
 
-→ **[Caso completo en Notion](https://app.notion.com/p/Dashboard-de-an-lisis-financiero-para-distribuidor-mayorista-365b7682d7a780808311d39841913f80)** — problema, proceso, medidas DAX y resultados.
+→ **[Caso completo en Notion](https://app.notion.com/p/Dashboard-de-an-lisis-financiero-para-distribuidor-mayorista-365b7682d7a780808311d39841913f80)**
 
 ---
 
